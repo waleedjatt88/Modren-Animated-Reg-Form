@@ -1,0 +1,25 @@
+.form-box.single-form {
+    left: 25%;
+    width: 50%;
+    padding: 0 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subtext {
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+
+@media (max-width: 768px) {
+  .form-box.single-form {
+    width: 100%;
+    left: 0; 
+    padding: 0; 
+  }
+}

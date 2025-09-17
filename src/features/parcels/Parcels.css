@@ -1,0 +1,83 @@
+/* --- Parcels View Container --- */
+.parcels-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #080a13;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+}
+
+/* --- Content Card --- */
+.parcels-card {
+  background: rgba(26, 29, 41, 0.7);
+  padding: 30px;
+  border-radius: 20px;
+  border: 2px solid #0ef;
+  box-shadow: 0 0 25px rgba(0, 239, 255, 0.3);
+  width: 100%;
+  max-width: 1200px;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.parcels-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.parcels-header h1 {
+  color: #0ef;
+  margin: 0;
+}
+
+/* --- Modern Table Styling --- */
+.table-wrapper {
+  overflow-x: auto; /* Make table scrollable on small screens */
+}
+
+.parcels-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #fff;
+}
+
+.parcels-table th, .parcels-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.parcels-table thead tr {
+  background-color: #1A1D29;
+  border-bottom: 2px solid #0ef;
+}
+
+.parcels-table th {
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.parcels-table tbody tr {
+  border-bottom: 1px solid #333;
+  transition: background-color 0.3s ease;
+}
+
+.parcels-table tbody tr:last-of-type {
+  border-bottom: none;
+}
+
+.parcels-table tbody tr:hover {
+  background-color: rgba(0, 239, 255, 0.1);
+}
+
+.no-parcels-message {
+  padding: 50px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #aaa;
+}

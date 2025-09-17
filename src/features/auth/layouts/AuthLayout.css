@@ -1,0 +1,371 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.wrapper {
+  position: relative;
+  width: 750px;
+  height: 520px; 
+  background: transparent;
+  border: 2px solid #0ef;
+  box-shadow: 0 0 25px #0ef;
+  overflow: hidden;
+  margin: 20px auto; /* center on screen */
+}
+
+.wrapper .form-box {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.wrapper .form-box.login {
+  left: 0;
+  padding: 0 60px 0 40px;
+}
+
+.wrapper .form-box.register {
+  right: 0;
+  padding: 0 40px 0 60px;
+}
+
+.form-box h2 {
+  font-size: 32px;
+  color: #fff;
+  text-align: center;
+}
+
+.form-box .input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin: 25px 0;
+}
+
+.input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid #fff;
+  padding-right: 23px;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 500;
+  transition: 0.5s;
+}
+
+.input-box input:focus,
+.input-box input:valid {
+  border-bottom-color: #0ef;
+}
+
+.input-box label {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #fff;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+  top: -5px;
+  color: #0ef;
+}
+
+.input-box i {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #fff;
+  transition: 0.5s;
+}
+
+.input-box input:focus ~ i,
+.input-box input:valid ~ i {
+  color: #0ef;
+}
+
+.btn {
+  position: relative;
+  width: 100%;
+  height: 45px;
+  background: transparent;
+  border: 2px solid #0ef;
+  outline: none;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 600;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 300%;
+  background: linear-gradient(#080a13, #0ef, #080a13, #0ef);
+  z-index: -1;
+  transition: 0.5s;
+}
+
+.btn:hover:before {
+  top: 0;
+}
+
+.form-box .logreg-link {
+  font-size: 14.5px;
+  color: #fff;
+  text-align: center;
+  margin: 20px 0 10px;
+}
+
+.logreg-link p a {
+  color: #0ef;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.logreg-link p a:hover {
+  text-decoration: underline;
+}
+
+.wrapper .info-text {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.wrapper .info-text.login {
+  right: 0;
+  text-align: right;
+  padding: 0 40px 60px 150px;
+}
+
+.wrapper .info-text.register {
+  left: 0;
+  text-align: left;
+  padding: 0 150px 60px 40px;
+}
+
+.info-text h2 {
+  font-size: 36px;
+  color: #fff;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.info-text p {
+  font-size: 16px;
+  color: #fff;
+}
+
+.wrapper .bg-animate {
+  position: absolute;
+  top: -4px;
+  right: 0;
+  width: 850px;
+  height: 600px;
+  background: linear-gradient(45deg, #080a13, #0ef);
+  border-bottom: 3px solid #0ef;
+  transform: rotate(10deg) skewY(40deg);
+  transform-origin: bottom right;
+  transition: 1.5s ease-in-out;
+}
+
+.wrapper .bg-animate2 {
+  position: absolute;
+  top: 100%;
+  left: 250px;
+  width: 850px;
+  height: 700px;
+  background: #080a13;
+  border-top: 3px solid #0ef;
+  transform: rotate(0) skewY(0);
+  transform-origin: bottom left;
+  transition: 1.5s ease-in-out;
+}
+
+.wrapper.active .bg-animate {
+  transform: rotate(0) skewY(0);
+}
+
+.wrapper.active .bg-animate2 {
+  transform: rotate(-11deg) skewY(-41deg);
+}
+
+.wrapper.active .form-box.login {
+  left: -100%;
+}
+
+.wrapper.active .info-text.login {
+  right: -100%;
+}
+
+.wrapper .form-box.login .animation,
+.wrapper .info-text.login .animation {
+  transform: translateX(0);
+  opacity: 1;
+  filter: blur(0);
+  transition: 0.7s ease;
+  transition-delay: calc(0.1s * var(--j));
+}
+
+.wrapper.active .form-box.login .animation,
+.wrapper.active .info-text.login .animation {
+  transform: translateX(-100%);
+  opacity: 0;
+  filter: blur(10px);
+  transition-delay: calc(0.1s * var(--i));
+}
+
+.wrapper .form-box.register {
+  right: -100%;
+}
+
+.wrapper.active .form-box.register {
+  right: 0;
+}
+
+.wrapper .info-text.register {
+  left: -100%;
+}
+
+.wrapper.active .info-text.register {
+  left: 0;
+}
+
+.wrapper .form-box.register .animation,
+.wrapper .info-text.register .animation {
+  transform: translateX(100%);
+  opacity: 0;
+  filter: blur(10px);
+  transition: 0.7s ease;
+  transition-delay: calc(0.1s * var(--j));
+}
+
+.wrapper.active .form-box.register .animation,
+.wrapper.active .info-text.register .animation {
+  transform: translateX(0);
+  opacity: 1;
+  filter: blur(0);
+  transition-delay: calc(0.1s * var(--i));
+}
+
+/* Styles for single form view (OTP, Forgot Password etc.) */
+.wrapper.single-view .form-box.login,
+.wrapper.single-view .info-text.login,
+.wrapper.single-view .form-box.register,
+.wrapper.single-view .info-text.register {
+    display: none;
+}
+
+/* --- Form Spacing Adjustment --- */
+.form-box.register .input-box {
+    margin: 20px 0;
+}
+
+
+
+@media (max-width: 768px) {
+  /* Step 1: Wrapper Setup */
+  .wrapper {
+    width: 95%;
+    height: 100vh;       /* Full screen height */
+    margin: 0 auto;      /* Center horizontally */
+    display: flex;
+    align-items: center; /* Vertical center */
+    justify-content: center;
+    overflow: hidden;    /* 🚀 Scroll hata diya */
+  }
+
+  /* Step 2: Hide Desktop Elements */
+  .wrapper .info-text,
+  .wrapper .bg-animate,
+  .wrapper .bg-animate2 {
+    display: none;
+  }
+
+  /* Step 3: General Form Box Styling */
+  .wrapper .form-box {
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    height: auto;
+    padding: 25px 20px;
+    justify-content: flex-start;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Step 4: Compact Styling */
+  .wrapper .form-box h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+  .wrapper .form-box .input-box {
+    height: 45px;
+    margin: 14px 0;
+  }
+  .wrapper .form-box .btn {
+    height: 42px;
+    font-size: 15px;
+    margin-top: 10px;
+  }
+  .wrapper .form-box .divider {
+    margin: 12px 0;
+  }
+  .wrapper .form-box .logreg-link {
+    margin-top: 12px;
+    font-size: 14px;
+  }
+  .wrapper .form-box .forgot-link {
+    margin: -8px 0 8px !important;
+    font-size: 13px;
+  }
+
+  /* Step 5: Show one form at a time */
+  .wrapper .form-box.login { display: none; }
+  .wrapper:not(.active) .form-box.login { display: flex; }
+  .wrapper.active .form-box.register { display: flex; }
+  .wrapper.single-view .form-box { display: flex; }
+}
+
+/* Even smaller screens */
+@media (max-width: 360px) {
+    .wrapper .form-box {
+        padding: 20px 15px;
+    }
+    .wrapper .form-box .input-box {
+        margin: 12px 0;
+    }
+}

@@ -1,12 +1,11 @@
-import React from 'react'
-import Login from './1 reg form/login-signup/Login-Signup.jsx';
+import React from 'react';
+import AppRoutes from './routes/AppRoutes'; 
+import 'boxicons/css/boxicons.min.css';
 
-const App = () => {
+function App() {
   return (
-    <>
-      <Login />
-    </>
-  )
+    <AppRoutes />
+  );
 }
 
-export default App
+export default App;
