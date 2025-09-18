@@ -3,15 +3,15 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import TrackingStatus from './TrackingStatus';
 import CustomerDashboard from '../dashboard/CustomerDashboard'; 
-import { userService } from '../../services/userService'; 
+import { parcelService } from '../../services/parcelService'; 
 import './LandingPage.css';
 import { useAuth } from '../../context/AuthContext';
-import ParcelsView from '../parcels/ParcelsView'; // Naya component import karein
+import ParcelsView from '../parcels/ParcelsView'; 
 
 
 
 const LandingPage = () => {
-  const [view, setView] = useState('landing'); // 'landing', 'profile', ya 'parcels'
+  const [view, setView] = useState('landing'); 
   const [trackingId, setTrackingId] = useState('');
   const [parcelStatus, setParcelStatus] = useState(null);
   const [error, setError] = useState('');
@@ -24,7 +24,7 @@ const LandingPage = () => {
     }
   }, [user]);
 
-   const handleTrackParcel = async (e) => {
+     const handleTrackParcel = async (e) => {
     e.preventDefault();
     if (!trackingId) {
       setError('Please enter a tracking ID.');
@@ -34,21 +34,14 @@ const LandingPage = () => {
     setError('');
     setParcelStatus(null);
     try {
-        
-        const response = await userService.trackParcelById(trackingId);
-        
+        const response = await parcelService.trackParcelById(trackingId);
         if (response.data && response.data.status) {
             setParcelStatus(response.data.status);
         } else {
-            setError('Tracking ID not found. Please check and try again.');
+            setError('Tracking ID not found.');
         }
     } catch (err) {
-        if (err.response && err.response.status === 404) {
-             setError('Tracking ID not found. Please check and try again.');
-        } else {
-            setError('An error occurred. Please try again later.');
-        }
-        console.error("Tracking error:", err);
+        setError('Tracking ID not found or an error occurred.');
     } finally {
         setLoading(false);
     }

@@ -1,4 +1,3 @@
-// src/features/landing/Footer.jsx
 import React from 'react';
 
 const Footer = () => {

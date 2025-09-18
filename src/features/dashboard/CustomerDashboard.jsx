@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { userService } from "../../services/userService";
 import "./Dashboard.css";
+import { handleApiCall } from "../../helpers/toast.helper";
 
 const capitalizeFirstLetter = (string) => {
   if (!string) return "";
@@ -16,85 +17,80 @@ const CustomerDashboard = ({ onBack }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [profilePicUrl, setProfilePicUrl] = useState(null);
-  const [newProfilePicFile, setNewProfilePicFile] = useState(null); 
+  const [newProfilePicFile, setNewProfilePicFile] = useState(null);
 
   const fileInputRef = useRef(null);
   const BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
   const loadProfile = useCallback(async () => {
-    if (!user) return;
-    setLoading(true);
-    try {
-      const response = await userService.getUserProfile();
-      const userData = response.data;
-      
-      console.log("Full User Data Received:", userData);
+  if (!user) return;
 
-      setFullName(userData.fullName || "");
-      setPhoneNumber(userData.phoneNumber || "");
-      setAddress(userData.address || "");
-
-    
-      if (userData.ProfilePictures && userData.ProfilePictures.length > 0) {
-        const picData = userData.ProfilePictures[0];
-        if (picData && picData.url) {
-            setProfilePicUrl(`${BASE_URL}${picData.url}`);
-        } else {
-            setProfilePicUrl(null);
-        }
-      } else {
-        setProfilePicUrl(null);
-      }
-
-    } catch (error) {
-      console.error("Failed to fetch user profile:", error);
-      if (error.response?.status === 403) logout();
-    } finally {
-      setLoading(false);
+  await handleApiCall(
+    () => userService.getUserProfile(),   // ✅ function pass
+    {
+      pending: "Loading profile...",
+      error: "Loading profile failed",
     }
-  }, [user, logout, BASE_URL]); 
+  ).then((response) => {
+    const userData = response.data;
+    setFullName(userData.fullName || "");
+    setPhoneNumber(userData.phoneNumber || "");
+    setAddress(userData.address || "");
+    if (userData.ProfilePictures?.length > 0) {
+      const picData = userData.ProfilePictures[0];
+      setProfilePicUrl(picData?.url ? `${BASE_URL}${picData.url}` : null);
+    } else {
+      setProfilePicUrl(null);
+    }
+  });
+}, [user, BASE_URL]);
+
 
   useEffect(() => {
     loadProfile();
   }, [loadProfile]);
 
-  const handleProfileUpdate = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+ const handleProfileUpdate = async (e) => {
+  e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("fullName", fullName);
-    formData.append("phoneNumber", phoneNumber);
-    formData.append("address", address);
+  const formData = new FormData();
+  formData.append("fullName", fullName);
+  formData.append("phoneNumber", phoneNumber);
+  formData.append("address", address);
 
-    if (newProfilePicFile) {
-      formData.append("profilePicture", newProfilePicFile);
-    }
+  if (newProfilePicFile) {
+    formData.append("profilePicture", newProfilePicFile);
+  }
 
-    try {
-      const response = await userService.updateUserProfile(formData);
-      const updatedUserFromServer = response.data;
-      updateUser(updatedUserFromServer);
-      if (
-        updatedUserFromServer.ProfilePictures &&
-        updatedUserFromServer.ProfilePictures.length > 0
-      ) {
-        const picData = updatedUserFromServer.ProfilePictures[0];
-        setProfilePicUrl(`${BASE_URL}${picData.url}`);
-      } else {
-        setProfilePicUrl(null);
+  try {
+    const response = await handleApiCall(
+      userService.updateUserProfile(formData),
+      {
+        pending: "Updating profile...",
+        success: "Profile updated successfully!",
+        error: "Error updating profile.",
       }
-      
-      setNewProfilePicFile(null); 
-      alert("✅ Profile updated successfully!");
+    );
 
-    } catch (error) {
-      console.error("❌ Failed to update profile:", error);
-      alert("Error updating profile.");
-    } finally {
-      setLoading(false);
+    const updatedUserFromServer = response.data;
+    updateUser(updatedUserFromServer);
+
+    if (
+      updatedUserFromServer.ProfilePictures &&
+      updatedUserFromServer.ProfilePictures.length > 0
+    ) {
+      const picData = updatedUserFromServer.ProfilePictures[0];
+      setProfilePicUrl(`${BASE_URL}${picData.url}`);
+    } else {
+      setProfilePicUrl(null);
     }
-  };
+
+    setNewProfilePicFile(null);
+  } catch (err) {
+    console.error("Profile update failed:", err);
+  }
+};
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -209,9 +205,8 @@ const CustomerDashboard = ({ onBack }) => {
             type="submit"
             className="btn-primary"
             style={{ width: "100%", marginTop: "10px" }}
-            disabled={loading}
           >
-            {loading ? "Updating..." : "Update Profile"}
+            Update Profile
           </button>
         </form>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { authService } from '../../../services/authService';
+import { handleApiCall } from "../../../helpers/toast.helper"; 
 import '../css/OtpVerification.css';
 import '../css/Form.css';
 
@@ -35,15 +36,18 @@ const OtpVerification = () => {
     e.preventDefault(); 
     if (timer === 0) {
       try {
-        await authService.sendOtp({ email, type: 'resend_otp' });
+        await handleApiCall(
+          () => authService.sendOtp({ email, type: 'resend_otp' }),
+          "A new OTP has been sent to your email!",
+          "Failed to resend OTP. Please try again."
+        );
         setTimer(60);
         setError('');
         setOtp(new Array(6).fill(""));
-        
+
         if (inputRefs.current[0]) {
           inputRefs.current[0].focus();
         }
-        alert("A new OTP has been sent.");
       } catch (err) {
         setError("Failed to resend OTP.");
       }
@@ -63,6 +67,7 @@ const OtpVerification = () => {
       inputRefs.current[index - 1].focus();
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -73,15 +78,21 @@ const OtpVerification = () => {
     }
     setLoading(true);
     try {
-      const response = await authService.verifyOtp({ email, otp: enteredOtp, type: otpType });
+      const response = await handleApiCall(
+        () => authService.verifyOtp({ email, otp: enteredOtp, type: otpType }),
+        otpType === 'password_reset' 
+          ? "OTP Verified! Please set your new password." 
+          : "Email verified successfully! You can now log in.",
+        "Invalid or expired OTP."
+      );
 
-      if (otpType === 'password_reset') {
-        const { resetToken } = response.data;
-        alert("OTP Verified! Please set your new password.");
-        navigate('/reset-password', { state: { resetToken: resetToken } });
-      } else { 
-        alert("Email verified successfully! You can now log in.");
-        navigate('/login');
+      if (response) {
+        if (otpType === 'password_reset') {
+          const { resetToken } = response.data;
+          navigate('/reset-password', { state: { resetToken } });
+        } else {
+          navigate('/login');
+        }
       }
     } catch (err) {
       setError(err.response?.data?.message || "Invalid or expired OTP.");
@@ -111,7 +122,6 @@ const OtpVerification = () => {
                       value={data} 
                       onChange={e => handleChange(e.target, index)} 
                       onKeyDown={e => handleKeyDown(e, index)} 
-                      // ---
                       onFocus={e => e.target.select()} 
                     />
                 ))}

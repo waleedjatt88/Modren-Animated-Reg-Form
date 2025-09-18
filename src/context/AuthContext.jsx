@@ -59,18 +59,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-  const handleLogout = async () => {
+    const handleLogout = async () => {
+    if (!localStorage.getItem('token')) {
+      return;
+    }
+    
     try {
       await authService.logout();
-      console.log("Token successfully invalidated on the server.");
     } catch (error) {
       console.error("Logout API call failed, but logging out locally anyway:", error);
     } finally {
       setUser(null);
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      
-      navigate('/'); 
+      navigate('/');
     }
   };
 
