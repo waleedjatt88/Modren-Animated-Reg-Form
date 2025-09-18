@@ -1,9 +1,8 @@
-// src/features/parcels/ParcelsView.jsx
-import React, { useState, useEffect } from 'react';
-import { parcelService } from '../../services/parcelService';
-import './Parcels.css';
+import React, { useState, useEffect } from "react";
+import { parcelService } from "../../services/parcelService";
+import { handleApiCall } from "../../helpers/toast.helper";
+import "./Parcels.css";
 
-// Zone ID ko naam mein badalne ke liye helper object
 const ZONE_MAP = {
   1: "Punjab",
   2: "Sindh",
@@ -17,25 +16,26 @@ const ParcelsView = ({ onBack }) => {
 
   useEffect(() => {
     const fetchParcels = async () => {
-      setLoading(true); 
+      setLoading(true);
       try {
-        const response = await parcelService.getMyParcels();
+        const response = await handleApiCall(
+          () => parcelService.getMyParcels(), // ✅ function, not direct call
+          {
+            pending: "Loading parcels...",
+            success: "Parcels loaded!",
+            error: "Failed to load parcels.",
+          }
+        );
+
         const parcelsData = response.data.parcels;
-
-        if (Array.isArray(parcelsData)) {
-          setParcels(parcelsData);
-        } else {
-          console.error("The 'parcels' property in the API response is not an array:", parcelsData);
-          setParcels([]); 
-        }
-
+        setParcels(Array.isArray(parcelsData) ? parcelsData : []);
       } catch (error) {
-        console.error("Failed to fetch parcels:", error);
-        setParcels([]); 
+        setParcels([]);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
+
     fetchParcels();
   }, []);
 
@@ -54,11 +54,15 @@ const ParcelsView = ({ onBack }) => {
       <div className="parcels-card">
         <div className="parcels-header">
           <h1>My Parcels</h1>
-          <i className="bx bx-arrow-back back-icon" onClick={onBack} title="Back to Home"></i>
+          <i
+            className="bx bx-arrow-back back-icon"
+            onClick={onBack}
+            title="Back to Home"
+          ></i>
         </div>
-        
+
         <div className="table-wrapper">
-          {parcels.filter(p => p.status !== 'unconfirmed').length > 0 ? (
+          {parcels.filter((p) => p.status !== "unconfirmed").length > 0 ? (
             <table className="parcels-table">
               <thead>
                 <tr>
@@ -74,20 +78,19 @@ const ParcelsView = ({ onBack }) => {
               </thead>
               <tbody>
                 {parcels
-                  .filter(parcel => parcel.status !== 'unconfirmed') 
-                  .map(parcel => ( 
+                  .filter((parcel) => parcel.status !== "unconfirmed")
+                  .map((parcel) => (
                     <tr key={parcel.id}>
                       <td>{parcel.trackingNumber}</td>
                       <td>{parcel.pickupAddress}</td>
                       <td>{parcel.deliveryAddress}</td>
-                      <td>{ZONE_MAP[parcel.pickupZoneId] || 'N/A'}</td>
-                      <td>{ZONE_MAP[parcel.deliveryZoneId] || 'N/A'}</td>
+                      <td>{ZONE_MAP[parcel.pickupZoneId] || "N/A"}</td>
+                      <td>{ZONE_MAP[parcel.deliveryZoneId] || "N/A"}</td>
                       <td>{parcel.packageContent}</td>
-                      <td>{parcel.paymentMethod || 'Not specified'}</td>
+                      <td>{parcel.paymentMethod || "Not specified"}</td>
                       <td>{parcel.deliveryCharge}</td>
                     </tr>
-                  ))
-                }
+                  ))}
               </tbody>
             </table>
           ) : (

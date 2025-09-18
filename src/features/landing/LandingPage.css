@@ -10,10 +10,8 @@
   overflow-x: hidden;
 }
 
-/* --- Navbar --- */
 .navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 15px 5%;
   background: rgba(15, 18, 32, 0.8);
@@ -25,31 +23,53 @@
   left: 0;
   z-index: 100;
   box-sizing: border-box;
+  justify-content: space-between;
 }
+
 .navbar-logo {
   font-size: 1.8rem;
   font-weight: 700;
   color: #0ef;
+  flex-shrink: 0;
 }
-.navbar-links {
+
+.navbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+
+.navbar-right {
   display: flex;
   align-items: center;
   gap: 20px;
+  
 }
-.navbar-links a {
+
+.navbar-center a,
+.navbar-right a,
+.navbar-right button {
   color: #fff;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
+  cursor: pointer;
 }
-.navbar-links a:hover {
+
+.navbar-center a:hover {
   color: #0ef;
 }
-.navbar-links .btn-primary {
+
+.navbar-right .btn-primary {
   padding: 8px 25px;
   font-size: 15px;
   cursor: pointer;
+  color: #080a13;
+  
 }
+
 
 /* --- Main Content --- */
 .main-content {

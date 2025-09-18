@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../../../services/authService";
+import { showErrorToast, showSuccessToast } from '../../../helpers/toast.helper'; 
+
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -23,20 +25,18 @@ const SignupForm = () => {
     }
 
     setLoading(true);
-    try {
+try {
       const userData = { fullName, email, phoneNumber, password };
       await authService.register(userData);
-
-      navigate("/verify-otp", { state: { email, type: "email_verification" } });
+      
+      showSuccessToast("Registration successful! Please check your email for OTP.");
+      navigate('/verify-otp', { state: { email } });
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Registration failed. Please try again."
-      );
+      showErrorToast(err.response?.data?.message || 'Registration failed.');
     } finally {
       setLoading(false);
     }
   };
-
   const handleGoogleSignUp = () => {
     console.log("Attempting Google Sign-Up...");
   };

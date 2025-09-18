@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { authService } from '../../../services/authService'; 
+import { handleApiCall } from '../../../helpers/toast.helper'; // ✅ toast helper import
 import '../css/Form.css'; 
 
 const ResetPassword = () => {
@@ -36,12 +37,15 @@ const ResetPassword = () => {
 
     setLoading(true); 
     try {
-      await authService.resetPassword({ 
-        resetToken: resetToken, 
-        password: password,
-        confirmPassword: confirmPassword 
-      });
-      alert("Password has been reset successfully! Please log in with your new password.");
+      await handleApiCall(
+        authService.resetPassword({ 
+          resetToken: resetToken, 
+          password: password,
+          confirmPassword: confirmPassword 
+        }),
+        "Password has been reset successfully! Please log in with your new password."
+      );
+
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || "Failed to reset password. The token may be invalid or expired.");
