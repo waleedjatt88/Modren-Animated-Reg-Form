@@ -23,7 +23,4 @@ dist-ssr
 *.sw?
 # Environment variables
 *.local
-branch_structure.json
-temp_interactive_push.bat
-temp_auto_push.bat
 config.bat
